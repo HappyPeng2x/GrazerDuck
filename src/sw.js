@@ -53,10 +53,20 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   if (!url.protocol.startsWith('http')) return;
 
+  // Navigation requests land on the root URL (e.g. http://localhost:8765/ or
+  // https://host/GrazerDuck/), but the precache stores the file as index.html.
+  // Map trailing-slash navigations to index.html so the app opens offline even
+  // when '/' was never fetched through the SW (which happens when the server
+  // already sends COOP/COEP headers and the COI-reload guard never fires).
+  const lookupRequest =
+    event.request.mode === 'navigate' && url.pathname.endsWith('/')
+      ? new Request(new URL('index.html', event.request.url).href)
+      : event.request;
+
   event.respondWith(
     caches.open(CACHE_NAME).then(async (cache) => {
       try {
-        const cached = await cache.match(event.request);
+        const cached = await cache.match(lookupRequest);
         if (cached) return withCOI(cached);
 
         const response = await fetch(event.request);
@@ -65,7 +75,7 @@ self.addEventListener('fetch', (event) => {
         }
         return withCOI(response);
       } catch {
-        const cached = await cache.match(event.request);
+        const cached = await cache.match(lookupRequest);
         if (cached) return withCOI(cached);
         return new Response('Offline — resource not cached', { status: 503 });
       }
