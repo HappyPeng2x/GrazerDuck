@@ -123,12 +123,7 @@ The build bundles all three DuckDB WASM bundles (MVP / EH / COI) and all worker 
 2. Go to **Settings → Pages** and set source to *GitHub Actions*.
 3. The workflow in `.github/workflows/deploy.yml` runs on every push to `main` and deploys `dist/` automatically.
 
-If your repo is at `github.io/GrazerDuck` (i.e. not a root Pages site), add a repository variable:
-
-**Settings → Variables → Actions → New repository variable**  
-Name: `BASE_URL` Value: `/GrazerDuck/`
-
-The deploy workflow passes this through to Vite's `base` config.
+That's it — the Vite build uses relative asset paths (`./`) so it works correctly at any subdirectory without extra configuration.
 
 ### Any static host
 
