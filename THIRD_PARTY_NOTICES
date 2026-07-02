@@ -1,0 +1,133 @@
+GrazerDuck uses the following third-party software.
+
+===============================================================================
+APACHE-2.0 LICENSED PACKAGES
+===============================================================================
+
+The packages listed below are distributed under the Apache License, Version
+2.0.  The full text of this license is available at:
+  https://www.apache.org/licenses/LICENSE-2.0
+
+Copies of the Apache License 2.0 for each package are located in the
+respective package directory under node_modules/ and in the pre-built
+bundles produced by the build toolchain.
+
+  apache-arrow  v17.0.0  https://github.com/apache/arrow
+  flatbuffers   v24.x    https://github.com/google/flatbuffers
+  @swc/helpers  v0.5.x   https://github.com/swc-project/swc
+
+-------------------------------------------------------------------------------
+NOTICE file for apache-arrow
+(required by Apache License 2.0, Section 4(d))
+-------------------------------------------------------------------------------
+
+Apache Arrow
+Copyright 2016-2024 The Apache Software Foundation
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
+
+This product includes software from the SFrame project (BSD, 3-clause).
+* Copyright (C) 2015 Dato, Inc.
+* Copyright (c) 2009 Carnegie Mellon University.
+
+This product includes software from the Feather project (Apache 2.0)
+https://github.com/wesm/feather
+
+This product includes software from the DyND project (BSD 2-clause)
+https://github.com/libdynd
+
+This product includes software from the LLVM project
+ * distributed under the University of Illinois Open Source
+
+This product includes software from the google-lint project
+ * Copyright (c) 2009 Google Inc. All rights reserved.
+
+This product includes software from the mman-win32 project
+ * Copyright https://code.google.com/p/mman-win32/
+ * Licensed under the MIT License;
+
+This product includes software from the LevelDB project
+ * Copyright (c) 2011 The LevelDB Authors. All rights reserved.
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file.
+ * Moved from Kudu http://github.com/cloudera/kudu
+
+This product includes software from the CMake project
+ * Copyright 2001-2009 Kitware, Inc.
+ * Copyright 2012-2014 Continuum Analytics, Inc.
+ * All rights reserved.
+
+This product includes software from https://github.com/matthew-brett/multibuild (BSD 2-clause)
+ * Copyright (c) 2013-2016, Matt Terry and Matthew Brett; all rights reserved.
+
+This product includes software from the Ibis project (Apache 2.0)
+ * Copyright (c) 2015 Cloudera, Inc.
+ * https://github.com/cloudera/ibis
+
+This product includes software from Dremio (Apache 2.0)
+  * Copyright (C) 2017-2018 Dremio Corporation
+  * https://github.com/dremio/dremio-oss
+
+This product includes software from Google Guava (Apache 2.0)
+  * Copyright (C) 2007 The Guava Authors
+  * https://github.com/google/guava
+
+This product include software from CMake (BSD 3-Clause)
+  * CMake - Cross Platform Makefile Generator
+  * Copyright 2000-2019 Kitware, Inc. and Contributors
+
+This product includes code from Apache Kudu, which includes the following in
+its NOTICE file:
+
+  Apache Kudu
+  Copyright 2016 The Apache Software Foundation
+
+  This product includes software developed at
+  The Apache Software Foundation (http://www.apache.org/).
+
+  Portions of this software were developed at
+  Cloudera, Inc (http://www.cloudera.com/).
+
+This product includes code from Apache ORC, which includes the following in
+its NOTICE file:
+
+  Apache ORC
+  Copyright 2013-2019 The Apache Software Foundation
+
+  This product includes software developed by The Apache Software
+  Foundation (http://www.apache.org/).
+
+  This product includes software developed by Hewlett-Packard:
+  (c) Copyright [2014-2015] Hewlett-Packard Development Company, L.P
+
+-------------------------------------------------------------------------------
+
+===============================================================================
+MIT LICENSED PACKAGES
+===============================================================================
+
+The packages listed below are distributed under the MIT License.
+Each package retains its own copyright notice in its source.
+
+  @duckdb/duckdb-wasm       MIT  https://github.com/duckdb/duckdb-wasm
+  @duckdb/duckdb-wasm-shell MIT  https://github.com/duckdb/duckdb-wasm
+  xterm                     MIT  https://github.com/xtermjs/xterm.js
+  xterm-addon-fit           MIT  https://github.com/xtermjs/xterm.js
+  xterm-addon-web-links     MIT  https://github.com/xtermjs/xterm.js
+  xterm-addon-webgl         MIT  https://github.com/xtermjs/xterm.js
+  typescript                MIT  https://github.com/microsoft/TypeScript
+  vite                      MIT  https://github.com/vitejs/vite
+  vite-plugin-pwa           MIT  https://github.com/vite-pwa/vite-plugin-pwa
+
+===============================================================================
+0BSD LICENSED PACKAGES
+===============================================================================
+
+  tslib  0BSD  https://github.com/Microsoft/tslib
+
+  Copyright (c) Microsoft Corporation.
+  Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted.
+
+===============================================================================

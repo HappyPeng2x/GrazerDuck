@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0d1117" />
+  <meta name="description" content="GrazerDuck — a fully offline DuckDB SQL terminal. All data stays in your browser." />
+  <!-- PWA meta -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="GrazerDuck" />
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./icons/icon-32.png" />
+  <title>GrazerDuck</title>
+</head>
+<body>
+  <div id="app">
+
+    <!-- ── Header ─────────────────────────────────────────────────────────── -->
+    <header id="header">
+      <div class="header-logo">
+        <img src="./icons/icon-192.png" alt="GrazerDuck" class="header-duck" />
+        <div>
+          <div class="app-title">GrazerDuck</div>
+          <div class="app-subtitle">DuckDB SQL Terminal</div>
+        </div>
+      </div>
+
+      <div class="header-status">
+        <span id="status-dot" class="status-dot status-loading"></span>
+        <span id="status-text">Starting…</span>
+      </div>
+
+      <div class="header-spacer"></div>
+
+      <div class="privacy-badge" title="Hover to learn more">
+        <span class="badge-icon">🛡</span>
+        <span class="badge-text">100% Local</span>
+      </div>
+
+      <button id="btn-install" style="display:none" title="Add GrazerDuck to your desktop for offline use">
+        ＋ Install App
+      </button>
+    </header>
+
+    <!-- ── Terminal ───────────────────────────────────────────────────────── -->
+    <main id="terminal-wrapper">
+      <div id="terminal"></div>
+    </main>
+
+    <!-- ── Footer toolbar ────────────────────────────────────────────────── -->
+    <footer id="footer">
+      <button id="btn-import" class="footer-btn" title="Pick local files and register them with DuckDB">
+        <span class="btn-icon">📂</span> Import File
+      </button>
+      <div class="footer-sep"></div>
+      <button id="btn-export" class="footer-btn" title="Run a query and download the result">
+        <span class="btn-icon">💾</span> Export CSV / JSON
+      </button>
+      <div class="footer-sep"></div>
+      <button id="btn-help" class="footer-btn" title="Show SQL command cheat sheet">
+        <span class="btn-icon">⌨</span> Commands
+      </button>
+
+      <div class="footer-spacer"></div>
+      <span id="bundle-badge">DuckDB</span>
+    </footer>
+
+  </div><!-- #app -->
+
+  <!-- ── Update banner (shown when a new SW is available) ─────────────── -->
+  <div id="update-banner">
+    <span>A new version of GrazerDuck is ready.</span>
+    <button id="btn-update">Reload</button>
+  </div>
+
+  <!-- ── Export dialog ─────────────────────────────────────────────────── -->
+  <dialog id="dialog-export">
+    <div class="dialog-header">
+      <h3>Export Data</h3>
+    </div>
+    <div class="dialog-body">
+      <div>
+        <label class="dialog-label" for="export-query">SQL Query</label>
+        <textarea id="export-query" placeholder="SELECT * FROM my_table LIMIT 1000"></textarea>
+      </div>
+      <div>
+        <label class="dialog-label" for="export-filename">Filename</label>
+        <input id="export-filename" type="text" value="export.csv" />
+      </div>
+      <div>
+        <label class="dialog-label">Format</label>
+        <div class="format-row">
+          <label class="format-option">
+            <input type="radio" name="export-format" value="csv" checked /> CSV
+          </label>
+          <label class="format-option">
+            <input type="radio" name="export-format" value="json" /> JSON
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="dialog-footer">
+      <button id="btn-export-cancel" class="btn-secondary">Cancel</button>
+      <button id="btn-export-run" class="btn-primary">Export &amp; Download</button>
+    </div>
+  </dialog>
+
+  <!-- ── Help / cheat-sheet panel ─────────────────────────────────────── -->
+  <div id="help-panel">
+    <div class="help-drawer">
+      <div class="help-top">
+        <h3>DuckDB Shell Commands</h3>
+        <button id="btn-help-close" title="Close">✕</button>
+      </div>
+      <div class="help-body">
+
+        <div class="help-note">
+          Click any code block to copy it to the clipboard.
+        </div>
+
+        <div class="help-section">
+          <h4>Shell commands</h4>
+          <div class="help-entry">
+            <code onclick="navigator.clipboard.writeText('.help')">.help</code>
+            <p>List all shell dot-commands</p>
+          </div>
+          <div class="help-entry">
+            <code onclick="navigator.clipboard.writeText('.open :memory:')">.open :memory:</code>
+            <p>Reset to a fresh in-memory database</p>
+          </div>
+          <div class="help-entry">
+            <code onclick="navigator.clipboard.writeText('.timer on')">.timer on</code>
+            <p>Show query execution time</p>
+          </div>
+          <div class="help-entry">
+            <code onclick="navigator.clipboard.writeText('.mode table')">.mode table</code>
+            <p>Switch output to table format</p>
+          </div>
+        </div>
+
+        <div class="help-section">
+          <h4>Import (after clicking "Import File")</h4>
+          <div class="help-entry">
+            <code onclick="navigator.clipboard.writeText(`SELECT * FROM read_csv_auto('file.csv');`)">SELECT * FROM read_csv_auto('file.csv');</code>
+            <p>Auto-detect CSV types and headers</p>
+          </div>
+          <div class="help-entry">
+            <code onclick="navigator.clipboard.writeText(`SELECT * FROM read_parquet('file.parquet');`)">SELECT * FROM read_parquet('file.parquet');</code>
+          </div>
+          <div class="help-entry">
+            <code onclick="navigator.clipboard.writeText(`SELECT * FROM read_json_auto('file.json');`)">SELECT * FROM read_json_auto('file.json');</code>
+          </div>
+          <div class="help-entry">
+            <code onclick="navigator.clipboard.writeText(`CREATE TABLE t AS SELECT * FROM read_csv_auto('file.csv');`)">CREATE TABLE t AS SELECT * FROM read_csv_auto('file.csv');</code>
+            <p>Load file into a named table</p>
+          </div>
+        </div>
+
+        <div class="help-section">
+          <h4>Export (via shell)</h4>
+          <div class="help-entry">
+            <code onclick="navigator.clipboard.writeText(`COPY my_table TO 'out.csv' (FORMAT CSV, HEADER);`)">COPY my_table TO 'out.csv' (FORMAT CSV, HEADER);</code>
+          </div>
+          <div class="help-entry">
+            <code onclick="navigator.clipboard.writeText(`COPY (SELECT * FROM t WHERE id > 10) TO 'out.parquet';`)">COPY (SELECT * FROM t WHERE id > 10) TO 'out.parquet';</code>
+          </div>
+          <div class="help-entry">
+            <code onclick="navigator.clipboard.writeText(`COPY my_table TO 'out.json' (FORMAT JSON, ARRAY true);`)">COPY my_table TO 'out.json' (FORMAT JSON, ARRAY true);</code>
+          </div>
+        </div>
+
+        <div class="help-section">
+          <h4>Useful queries</h4>
+          <div class="help-entry">
+            <code onclick="navigator.clipboard.writeText('SELECT * FROM duckdb_tables();')">SELECT * FROM duckdb_tables();</code>
+            <p>List tables in the current database</p>
+          </div>
+          <div class="help-entry">
+            <code onclick="navigator.clipboard.writeText('PRAGMA database_list;')">PRAGMA database_list;</code>
+          </div>
+          <div class="help-entry">
+            <code onclick="navigator.clipboard.writeText('DESCRIBE my_table;')">DESCRIBE my_table;</code>
+            <p>Show column types</p>
+          </div>
+          <div class="help-entry">
+            <code onclick="navigator.clipboard.writeText('SUMMARIZE my_table;')">SUMMARIZE my_table;</code>
+            <p>Column statistics (min/max/avg/…)</p>
+          </div>
+        </div>
+
+      </div><!-- .help-body -->
+    </div><!-- .help-drawer -->
+  </div><!-- #help-panel -->
+
+  <!-- ── Toast container ──────────────────────────────────────────────── -->
+  <div id="toast-container"></div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
