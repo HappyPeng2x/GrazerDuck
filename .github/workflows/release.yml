@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - name: Package release zip
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          DIRNAME="GrazerDuck-${TAG}"
+          mkdir "$DIRNAME"
+          cp -r dist/. "$DIRNAME/"
+          cp Serve.ps1 "$DIRNAME/"
+          zip -r "GrazerDuck-${TAG}.zip" "$DIRNAME/"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$TAG" "GrazerDuck-${TAG}.zip" \
+            --title "GrazerDuck ${TAG}" \
+            --generate-notes

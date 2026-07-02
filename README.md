@@ -125,6 +125,35 @@ The build bundles all three DuckDB WASM bundles (MVP / EH / COI) and all worker 
 
 That's it — the Vite build uses relative asset paths (`./`) so it works correctly at any subdirectory without extra configuration.
 
+### Local install via PowerShell (for restricted networks)
+
+If your organisation blocks GitHub Pages, download a release zip instead:
+
+1. Go to [Releases](https://github.com/HappyPeng2x/GrazerDuck/releases) and download `GrazerDuck-vX.Y.Z.zip`.
+2. **Before extracting**, right-click the zip → **Properties** → tick **Unblock** → OK.  
+   *(Windows marks downloaded files as untrusted; unblocking the zip propagates to its contents.)*
+3. Extract the zip and open the resulting folder.
+4. Right-click `Serve.ps1` → **Run with PowerShell**.  
+   *(Or from a PowerShell prompt: `.\Serve.ps1`)*
+5. Your browser opens at `http://localhost:8765`. Click **+ Install App** in the toolbar.
+6. Close the PowerShell window — GrazerDuck works fully offline from now on.
+
+The server adds `Cross-Origin-Opener-Policy` / `Cross-Origin-Embedder-Policy` headers directly,
+so DuckDB picks its fastest (multi-threaded) WASM bundle on the very first load — no reload needed.
+
+To use a different port: `.\Serve.ps1 -Port 9000`
+
+### Creating a release (maintainers)
+
+Tag a commit to trigger the release workflow:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+GitHub Actions builds the project, packages `dist/` and `Serve.ps1` into `GrazerDuck-v1.0.0.zip`, and attaches it to a GitHub Release automatically.
+
 ### Any static host
 
 ```bash
@@ -146,7 +175,12 @@ GrazerDuck/
 │   └── style.css     # All styles (CSS custom properties, dark theme)
 ├── public/
 │   └── icons/        # PWA icons (32, 192, 512, maskable-512, apple-touch-icon)
+├── .github/
+│   └── workflows/
+│       ├── deploy.yml   # GitHub Pages deploy on push to main
+│       └── release.yml  # Build + zip + GitHub Release on version tag
 ├── index.html        # Single-page shell: header, terminal div, footer, dialogs
+├── Serve.ps1         # PowerShell HTTP server for local PWA installation
 ├── vite.config.ts    # Vite + vite-plugin-pwa (injectManifest strategy)
 ├── tsconfig.json
 ├── LICENSE           # AGPLv3-or-later
