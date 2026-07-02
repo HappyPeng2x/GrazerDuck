@@ -27,14 +27,20 @@ function withCOI(response) {
 }
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        const urls = PRECACHE.map((e) => e.url);
-        return cache.addAll(urls);
-      })
-      .then(() => self.skipWaiting())
-  );
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE_NAME);
+    await cache.addAll(PRECACHE.map((e) => e.url));
+
+    // The precache stores 'index.html', but an installed PWA launches by
+    // navigating to the base URL (e.g. http://localhost:8765/ or /GrazerDuck/).
+    // Explicitly put the root URL in cache so offline navigation always hits.
+    const base     = new URL('./',         self.location.href).href;
+    const indexUrl = new URL('index.html', self.location.href).href;
+    const indexRes = await cache.match(indexUrl);
+    if (indexRes) await cache.put(base, indexRes);
+
+    await self.skipWaiting();
+  })());
 });
 
 self.addEventListener('activate', (event) => {
